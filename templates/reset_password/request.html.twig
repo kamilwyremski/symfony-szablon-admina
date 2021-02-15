@@ -1,0 +1,31 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %}Zresetuj swoje hasło - {{ setting('title') }}{% endblock %}
+
+{% block loginbody %}
+<div class="card-body">
+    <h1 class="card-title">Zresetuj swoje hasło</h1>
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    {% if app.user %}
+        <div class="mb-3">
+            Jesteś zalogowany jako {{ app.user.username }}, <a href="{{ path('app_logout') }}" title="Wyloguj" class="color-secondary">Wyloguj</a>
+        </div>
+    {% endif %}
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <p><small>Wprowadź swój adres email lub login a zostanie na niego wysłany link do resetu hasła.</small></p>
+        <input type="hidden" name="recaptcha_response" class="recaptchaResponse">
+        <button class="btn btn-primary btn-block">Wyślij link do resetu hasła</button>
+    {{ form_end(requestForm) }}
+    {% if setting('recaptcha_site_key') %}
+        <p><small>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="nofollow">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="nofollow">Terms of Service</a> apply.</small></p>
+    {% endif %}
+    <div class="text-center mt-2">
+        <ul class="list-unstyled">
+            <li><a href="{{ path('app_login') }}" title="Logowanie" class="color-primary">Logowanie</a><li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

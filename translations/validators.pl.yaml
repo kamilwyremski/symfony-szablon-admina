@@ -1,0 +1,8 @@
+Your password should be at least {{ limit }} characters: Twoje hasło powinno mieć minimum {{ limit }} znaków
+There is already an account with this username: Wybrany login jest już zajęty
+There is already an account with this email: Istnieje już konto założone na ten adres email
+You should agree to our terms.: Musisz zaakceptować regulamin i politykę prywatności.
+Your username cannot contain a special chars: Twój login nie może zawierać znaków specjalnych
+Please enter your username or email: Wprowadź swój login lub adres email
+The password fields must match.: Hasła muszą być takie same.
+There is already a page with this name: Istnieje już strona o tej nazwie

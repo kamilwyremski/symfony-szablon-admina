@@ -1,0 +1,46 @@
+
+{% extends "base.html.twig" %}
+
+{% block title %}Ustawienia - {{ setting('title') }}{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+	<h1><i class="fas fa-cog"></i> Ustawienia</h1>
+</div>
+
+{% include 'partial/alert.html.twig' %}
+
+{{ form(form) }}
+
+<br>
+<hr>
+<br>
+<div class="col-12 d-flex">
+
+	<button class="btn btn-danger btn-sm mr-3 mb-3" data-toggle="modal" data-target="#modal_clear_cache">Usuń cache</button>
+
+</div>
+
+<div class="modal fade" id="modal_clear_cache" tabindex="-1" role="dialog" aria-labelledby="Usuń cache">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Usuń cache</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<form method="post" action="{{ path('admin_command_cache_clear') }}">
+				<input type="hidden" name="token" value="{{ csrf_token('clear-cache') }}"/>
+				<div class="modal-body">
+					<p>Na pewno?</p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-secondary" data-dismiss="modal" value="Anuluj">
+					<input type="submit" class="btn btn-danger" value="Usuń cache">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

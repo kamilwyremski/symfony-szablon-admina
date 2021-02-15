@@ -1,0 +1,27 @@
+doctrine:
+    dbal:
+        dbname:               '%env(resolve:DATABASE_NAME)%'
+        host:                 '%env(resolve:DATABASE_HOST)%'
+        port:                 '%env(resolve:DATABASE_PORT)%'
+        user:                 '%env(resolve:DATABASE_USER)%'
+        password:             '%env(resolve:DATABASE_PASS)%'
+        driver:               pdo_mysql
+        server_version:       '%env(resolve:DATABASE_SERVER_VERSION)%'
+        charset: utf8
+        default_table_options:
+            charset: utf8
+            collate: utf8_unicode_ci
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App
+        dql:
+           string_functions:
+                MATCH: DoctrineExtensions\Query\Mysql\MatchAgainst 

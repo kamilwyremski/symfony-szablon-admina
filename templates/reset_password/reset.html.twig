@@ -1,0 +1,17 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %}Zresetu hasło - {{ setting('title') }}{% endblock %}
+
+{% block loginbody %}
+<div class="card-body">
+    <h1 class="card-title">Zresetu hasło</h1>
+    {{ form_start(resetForm) }}
+        {{ form_row(resetForm.plainPassword) }}
+    {{ form_end(resetForm) }}
+    <div class="text-center mt-2">
+        <ul class="list-unstyled">
+            <li><a href="{{ path('app_login') }}" title="Logowanie" class="color-primary">Logowanie</a><li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

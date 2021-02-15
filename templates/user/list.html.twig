@@ -1,0 +1,155 @@
+
+{% extends "base.html.twig" %}
+
+{% block title %}Użytkownicy - {{ setting('title') }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+	<h1><i class="fas fa-user"></i> Użytkownicy</h1>
+	<br><a href="{{ path('user_add') }}" class="btn btn-primary">Dodaj użytkownika</a>
+</div>
+
+{% include 'partial/alert.html.twig' %}
+
+<form method="get" class="form" role="form">
+	<div class="form-group row">
+		<div class="col-xl-4 col-sm-6">
+			<label for="username">Login:</label>
+			<input type="text" name="username" title="Login" placeholder="Login" value="{{ findBy.username }}" class="form-control">
+		</div>
+		<div class="col-xl-4 col-sm-6">
+			<label for="email">Adres e-mail:</label>
+			<input type="text" name="email" title="Adres e-mail" placeholder="Adres e-mail" value="{{ findBy.email }}" class="form-control">
+		</div>
+		<div class="col-xl-2 col-sm-6">
+			<label for="is_active">Aktywny:</label>
+			<select name="is_active" title="Aktywny" class="form-control">
+				<option value="">{{ 'All'|trans }}</option>
+				<option value="yes" {% if findBy.is_active=='yes' %}selected{% endif %}>Tak</option>
+				<option value="no" {% if findBy.is_active=='no' %}selected{% endif %}>Nie</option>
+			</select>
+		</div>
+		<div class="col-xl-2 col-sm-6">
+			<label for="role">Role:</label>
+			<select name="role" title="{{ 'Role'|trans }}" class="form-control">
+				<option value="">Wszystkie</option>
+				<option value="moderator" {% if findBy.role=='moderator' %}selected{% endif %}>{{ 'Moderator'|trans }}</option>
+				<option value="admin" {% if findBy.role=='admin' %}selected{% endif %}>{{ 'Admin'|trans }}</option>
+			</select>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xl-6 col-sm-6">
+			<label for="date">Data rejestracji: </label>
+			<div class="input-group">
+				<input name="date_from" title="{{ 'Starting date'|trans }}" type="date" max="{{ 'now'|date('Y-m-d') }}" value="{{ findBy.date_from }}" class="form-control">
+				<div class="input-group-append input-group-prepend">
+					<span class="input-group-text"> - </span>
+				</div>
+				<input name="date_to" title="{{ 'End date'|trans }}" type="date" max="{{ 'now'|date('Y-m-d') }}" value="{{ findBy.date_to }}" class="form-control">
+			</div>
+		</div>
+		<div class="col-xl-3 col-sm-6">
+			<label for="register_ip">IP rejestracji:</label>
+			<input type="text" name="register_ip" title="{{ 'IP address'|trans }}" placeholder="{{ 'IP address'|trans }}" value="{{ findBy.register_ip }}"{ class="form-control">
+		</div>
+		<div class="col-xl-3 col-sm-6">
+			<label>&nbsp;</label><br>
+			<input type="submit" value="Szukaj" class="btn btn-primary text-uppercase btn-block">
+		</div>
+	</div>
+</form>
+<br>
+
+{% if users.getTotalItemCount %}
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-sm select-all-checkbox-parent">
+			<tr>
+				<th><input type="checkbox" class="select-all-checkbox" title="{{ 'Select all'|trans }}"></th>
+				<th class="text-center{% if users.isSorted('u.id') %} table-active{% endif %}">
+          {{ knp_pagination_sortable(users, 'ID', 'u.id') }}
+        </th>
+				<th class="text-center{% if users.isSorted('u.username') %} table-active{% endif %}">
+          {{ knp_pagination_sortable(users, 'Username'|trans, 'u.username') }}
+        </th>
+				<th class="text-center{% if users.isSorted('u.email') %} table-active{% endif %}">
+          {{ knp_pagination_sortable(users, 'Email'|trans, 'u.email') }}
+        </th>
+				<th>Role</th>
+				<th>Aktywny</th>
+				<th>Rejestracja</th>
+				<th class="text-center">Edytuj</th>
+				<th class="text-center">Usuń</th>
+			</tr>
+			{% for user in users %}
+				<tr>
+					<td class="text-center">
+						<input type="checkbox" name="user_multiple_form[ids][]" value="{{ user.id }}" form="form_selected_classifieds" class="select-checkbox">
+					</td>
+					<td class="text-center">{{ user.id }}</td>
+					<td><b>{{ user.username }}</b></td>
+					<td>
+						<a href="mailto:{{ user.email }}">{{ user.email }}</a>
+					</td>
+					<td>
+						{{ user.roles|join('<br>')|raw }}
+					</td>
+					<td>
+						{% if user.isActive %}
+							{% if user.activationDate %}
+								{{ user.activationDate|date('Y-m-d H:i') }}<br>
+							{% endif %}
+							{{ user.activationIp }}
+						{% else %}
+							<span class="text-danger">{{ 'User inactive'|trans }}</span>
+						{% endif %}
+					</td>
+					<td>
+						{{ user.registerDate|date('Y-m-d H:i') }}<br>
+						{{ user.registerIp }}
+					</td>
+					<td class="text-center"><a href="{{ path('user_edit',{'id':user.id}) }}" class="btn btn-link fas fa-edit"></a></td>
+					<td class="text-center">
+						{% if user.id != app.user.id %}
+							<button class="btn btn-link fas fa-trash-alt text-danger" data-toggle="modal" data-target="#remove_{{ user.id }}"></button>
+						{% endif %}
+					</td>
+				</tr>
+
+				{% if user.id != app.user.id %}
+					<div class="modal fade" id="remove_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="Usuń: {{ user.username }}">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Usuń {{ user.username }}</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								</div>
+								<form method="post" action="{{ path('user_delete', { id: user.id }) }}">
+									<input type="hidden" name="token" value="{{ csrf_token('delete-user') }}"/>
+									<div class="modal-body">
+										<p>Na pewno chcesz usunąć: {{ user.username }}?</p>
+									</div>
+									<div class="modal-footer">
+										<input type="button" class="btn btn-secondary" data-dismiss="modal" value="{{ 'Cancel'|trans }}">
+										<input type="submit" class="btn btn-danger" value="Usuń">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+
+	{{ form_start(form,  {'attr': {'id': 'form_selected_classifieds', 'class': 'form-inline mt-3 mb-3'}}) }}
+		{{ form_row(form.type, {'attr': {'class': 'ml-2 mr-1'}}) }}
+		{{ form_row(form.submit, {'attr': {'class': 'btn-danger'}}) }}
+	{{ form_end(form) }}
+
+	{{ knp_pagination_render(users) }}
+{% else %}
+	<h5 class="text-danger">{{ 'Nothing found'|trans }}</h5>
+{% endif %}
+
+{% endblock %}

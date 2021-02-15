@@ -1,0 +1,18 @@
+{% block file_manager_row %}
+  <div class="form-group">
+      {{ form_label(form) }}
+      <button type="button" class="btn btn-link btn-open-file-manager" data-toggle="modal" data-target="#fileManagerModal">
+        <img src="{% if form.vars.value %}{{ form.vars.value }}{% else %}{{ asset('assets/admin/images/no_image.png') }}{% endif %}" onerror="this.src='{{ asset('assets/admin/images/no_image.png') }}'" class="file-manager-image">
+      </button>
+      <div class="input-group">
+        {{ form_widget(form) }}
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary btn-sm btn-open-file-manager" data-toggle="modal" data-target="#fileManagerModal">
+              <i class="far fa-folder-open"></i>
+          </button>
+        </div>
+      </div>
+      {{ form_help(form) }}
+      {{ form_errors(form) }}
+  </div>
+{% endblock %}

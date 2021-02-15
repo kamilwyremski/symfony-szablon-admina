@@ -1,0 +1,25 @@
+
+APP_ENV=dev
+
+APP_SECRET=5Wc8iTizj0Y4BBOFlJhfPM8euM1wjKzS
+
+APP_URL=https://localhost:8000
+
+###> symfony/mailer ###
+# MAILER_DSN=smtp://localhost
+# MAILER_DSN=sendmail://localhost
+
+MAILER_DSN=sendmail://localhost
+
+###< symfony/mailer ###
+
+###> doctrine/doctrine-bundle ###
+
+DATABASE_HOST=127.0.0.1
+DATABASE_PORT=3307
+DATABASE_USER=root
+DATABASE_NAME=panel
+DATABASE_PASS=
+DATABASE_SERVER_VERSION=mariadb-10.5.4
+
+###< doctrine/doctrine-bundle ###
